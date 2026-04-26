@@ -1,5 +1,8 @@
 #!/bin/bash
-
+if [ "$EUID" -ne 0 ]; then
+  echo "Run as root"
+  exit 1
+fi
 RED="\033[0;31m"
 GREEN="\033[0;32m"
 YELLOW="\033[0;33m"
@@ -16,9 +19,9 @@ echo -e "${GREEN}╚═╝░░╚══╝░╚═════╝░░░░
 sleep 1
 
 echo -e "${YELLOW} Installing Updates...${RESET}"
-DEBIAN_FRONTEND=noninteractive sudo apt update -y >/dev/null 2>&1
+DEBIAN_FRONTEND=noninteractive apt update -y >/dev/null 2>&1
 echo -e "${YELLOW} Installing Dependencies...${RESET}"
-sudo apt install -y curl mailutils swaks>/dev/null 2>&1
+DEBIAN_FRONTEND=noninteractive apt install -y curl mailutils swaks>/dev/null 2>&1
 echo -e "${GREEN}[✓] Installed postfix, mailutils, swaks${RESET}"
 
 echo -e "${YELLOW}[*] Configuring Postfix...${RESET}"
